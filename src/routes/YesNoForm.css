@@ -1,14 +1,22 @@
+/* Reset básico */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 * {
   box-sizing: border-box;
 }
 
 .contenedor {
   max-width: 500px;
-  margin: 2rem auto; /* esto le da margen exterior vertical */
-  padding: 2rem 1.5rem; /* esto da espacio interior arriba, abajo y costados */
+  margin: 2rem auto;
+  padding: 2rem 1rem;
   text-align: center;
   border-radius: 12px;
   transition: background-color 0.5s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .fondo-yes {
@@ -88,13 +96,15 @@
 
 @media (max-width: 600px) {
   .contenedor {
-    padding: 1.5rem 1rem;
-    margin: 1rem;
+    margin: 1rem auto;
+    padding: 1.2rem;
+    width: 90%; /* esto le da un ancho proporcional al viewport */
   }
 
   .formulario input {
-    font-size: 0.95rem;
+    width: 100%;
     padding: 0.5rem;
+    font-size: 0.95rem;
   }
 
   .formulario button {
@@ -110,4 +120,3 @@
     font-size: 0.95rem;
   }
 }
-
