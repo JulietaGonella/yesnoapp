@@ -1,0 +1,84 @@
+.contenedor {
+  max-width: 500px;
+  margin: 2rem auto; /* esto le da margen exterior vertical */
+  padding: 2rem 1.5rem; /* esto da espacio interior arriba, abajo y costados */
+  text-align: center;
+  border-radius: 12px;
+  transition: background-color 0.5s ease;
+}
+
+.fondo-yes {
+  background-color: #d4f5d4;
+}
+
+.fondo-no {
+  background-color: #f8d7da;
+}
+
+.fondo-maybe {
+  background-color: #fff3cd;
+}
+
+.formulario input {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.formulario button {
+  margin: 0.3rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.limpiar-btn {
+  background-color: #ddd;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.respuesta-container {
+  margin-top: 1rem;
+}
+
+.respuesta-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.historial {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.historial ul {
+  padding-left: 1rem;
+}
+
+.animada {
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
