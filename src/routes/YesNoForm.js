@@ -25,10 +25,30 @@ function YesNoForm() {
   };
 
   // Verifica si la pregunta es del tipo "¿Esto o esto?"
-const esPreguntaDeOpcionMultiple = (texto) => {
-  const textoLimpio = texto.toLowerCase();
-  return textoLimpio.includes(" o "); // Busca el conector " o "
-};
+
+  const esPreguntaDeOpcionMultiple = (texto) => {
+    const textoLimpio = texto.toLowerCase();
+    return textoLimpio.includes(" o "); // Busca el conector " o "
+  };
+
+  // Verifica si la pregunta es abierta (no se responde con sí/no)
+  const esPreguntaAbierta = (texto) => {
+    const palabrasAbiertas = [
+      "qué",
+      "cuál",
+      "cuáles",
+      "cómo",
+      "cuándo",
+      "dónde",
+      "por qué",
+      "porque"
+    ];
+    const textoLimpio = texto.toLowerCase();
+    return palabrasAbiertas.some((palabra) =>
+      textoLimpio.includes(palabra)
+    );
+  };
+
 
 
   // Maneja el envío del formulario 
@@ -46,6 +66,10 @@ const handleSubmit = async (e) => {
   return;
 }
 
+if (esPreguntaAbierta(pregunta)) {
+  setError("No puedo responder este tipo de preguntas. Hacé una pregunta que se pueda responder con sí, no o tal vez.");
+  return;
+}
 
   setError("");
   setLoading(true);       // Activa el estado de carga
