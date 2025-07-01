@@ -53,51 +53,57 @@ function YesNoForm() {
 
   // Maneja el envío del formulario 
 const handleSubmit = async (e) => {
-  e.preventDefault(); // Evita que se recargue la página
+  e.preventDefault();
 
-  // Validación de formato de pregunta
+  // Validación de formato
   if (!esPreguntaValida(pregunta)) {
     setError("La pregunta debe terminar con un signo de interrogación (¿...? o ...?).");
+    setRespuesta(null); // 🔴 Limpia respuesta
+    setImagen(null);    // 🔴 Limpia imagen
     return;
   }
 
   if (esPreguntaDeOpcionMultiple(pregunta)) {
-  setError("No puedo responder este tipo de preguntas. Hacé una pregunta que se pueda responder con sí, no o tal vez.");
-  return;
-}
+    setError("No puedo responder este tipo de preguntas. Hacé una pregunta que se pueda responder con sí, no o tal vez.");
+    setRespuesta(null); // 🔴 Limpia respuesta
+    setImagen(null);    // 🔴 Limpia imagen
+    return;
+  }
 
-if (esPreguntaAbierta(pregunta)) {
-  setError("No puedo responder este tipo de preguntas. Hacé una pregunta que se pueda responder con sí, no o tal vez.");
-  return;
-}
+  if (esPreguntaAbierta(pregunta)) {
+    setError("No puedo responder este tipo de preguntas. Hacé una pregunta que se pueda responder con sí, no o tal vez.");
+    setRespuesta(null); // 🔴 Limpia respuesta
+    setImagen(null);    // 🔴 Limpia imagen
+    return;
+  }
 
+  // Si pasa todas las validaciones
   setError("");
-  setLoading(true);       // Activa el estado de carga
-  setRespuesta(null);     // Limpia la respuesta anterior
-  setImagen(null);        // Limpia la imagen anterior
+  setLoading(true);
+  setRespuesta(null);
+  setImagen(null);
 
   try {
-    // Llama a la API para obtener la respuesta real con imagen coherente
     const response = await axios.get("https://yesno.wtf/api");
-
-    const respuestaAPI = response.data.answer; // "yes", "no", "maybe"
+    const respuestaAPI = response.data.answer;
     const imagenAPI = response.data.image;
 
-    // Actualiza los estados con la respuesta e imagen reales
     setRespuesta(respuestaAPI);
     setImagen(imagenAPI);
 
-    // Agrega la pregunta y la respuesta al historial correctamente
     setHistorial((prev) => [
       ...prev,
-      { pregunta, respuesta: respuestaAPI }
+      { pregunta, respuesta: respuestaAPI },
     ]);
   } catch (error) {
     setError("Hubo un error al consultar la API.");
+    setRespuesta(null); // 🔴 Por si hay error de red, también se limpia
+    setImagen(null);
   } finally {
-    setLoading(false); // Desactiva el estado de carga
+    setLoading(false);
   }
 };
+
 
 
   // Limpia todo el formulario y resultados
