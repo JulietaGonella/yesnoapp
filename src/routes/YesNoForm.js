@@ -24,45 +24,57 @@ function YesNoForm() {
     return (empiezaConsigno && terminaConsigno) || (!empiezaConsigno && terminaConsigno);
   };
 
-  // Maneja el envío del formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Evita que se recargue la página
+  // Verifica si la pregunta es del tipo "¿Esto o esto?"
+const esPreguntaDeOpcionMultiple = (texto) => {
+  const textoLimpio = texto.toLowerCase();
+  return textoLimpio.includes(" o "); // Busca el conector " o "
+};
 
-    // Validación de formato de pregunta
-    if (!esPreguntaValida(pregunta)) {
-      setError("La pregunta debe terminar con un signo de interrogación (¿...? o ...?).");
-      return;
-    }
 
-    setError("");
-    setLoading(true);       // Activa el estado de carga
-    setRespuesta(null);     // Limpia la respuesta anterior
-    setImagen(null);        // Limpia la imagen anterior
+  // Maneja el envío del formulario 
+const handleSubmit = async (e) => {
+  e.preventDefault(); // Evita que se recargue la página
 
-    try {
-      // Llama a la API para obtener la imagen
-      const response = await axios.get("https://yesno.wtf/api");
+  // Validación de formato de pregunta
+  if (!esPreguntaValida(pregunta)) {
+    setError("La pregunta debe terminar con un signo de interrogación (¿...? o ...?).");
+    return;
+  }
 
-      // Genera una respuesta aleatoria entre yes, no y maybe
-      const respuestasPosibles = ["yes", "no", "maybe"];
-      const respuestaAleatoria =
-        respuestasPosibles[Math.floor(Math.random() * respuestasPosibles.length)];
+  if (esPreguntaDeOpcionMultiple(pregunta)) {
+  setError("No puedo responder este tipo de preguntas. Hacé una pregunta que se pueda responder con sí, no o tal vez.");
+  return;
+}
 
-      // Actualiza la respuesta y la imagen
-      setRespuesta(respuestaAleatoria);
-      setImagen(response.data.image);
 
-      // Agrega la pregunta y respuesta al historial
-      setHistorial((prev) => [
-        ...prev,
-        { pregunta, respuesta: respuestaAleatoria }
-      ]);
-    } catch (error) {
-      setError("Hubo un error al consultar la API.");
-    } finally {
-      setLoading(false); // Desactiva el estado de carga
-    }
-  };
+  setError("");
+  setLoading(true);       // Activa el estado de carga
+  setRespuesta(null);     // Limpia la respuesta anterior
+  setImagen(null);        // Limpia la imagen anterior
+
+  try {
+    // Llama a la API para obtener la respuesta real con imagen coherente
+    const response = await axios.get("https://yesno.wtf/api");
+
+    const respuestaAPI = response.data.answer; // "yes", "no", "maybe"
+    const imagenAPI = response.data.image;
+
+    // Actualiza los estados con la respuesta e imagen reales
+    setRespuesta(respuestaAPI);
+    setImagen(imagenAPI);
+
+    // Agrega la pregunta y la respuesta al historial correctamente
+    setHistorial((prev) => [
+      ...prev,
+      { pregunta, respuesta: respuestaAPI }
+    ]);
+  } catch (error) {
+    setError("Hubo un error al consultar la API.");
+  } finally {
+    setLoading(false); // Desactiva el estado de carga
+  }
+};
+
 
   // Limpia todo el formulario y resultados
   const handleReset = () => {
